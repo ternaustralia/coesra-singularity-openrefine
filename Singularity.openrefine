@@ -1,0 +1,27 @@
+BootStrap: docker
+From: ubuntu:18.04
+
+
+%startscript
+  exec /opt/openrefine-3.1/refine
+
+%runscript
+  $*
+
+%environment
+  OPENREFINE_PATH=/opt/openrefine-3.1
+  export PATH=$OPENREFINE_PATH:$PATH
+
+%post
+  apt update -y
+  apt-get install -y software-properties-common wget locales default-jre
+  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted'
+  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted'
+  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic universe'
+  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe'
+
+  locale-gen en_AU.UTF-8
+
+  cd /opt
+  wget -O openrefine-linux-3.1.tar.gz https://github.com/OpenRefine/OpenRefine/releases/download/3.1/openrefine-linux-3.1.tar.gz
+  tar -zxvf openrefine-linux-3.1.tar.gz
