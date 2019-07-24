@@ -3,25 +3,25 @@ From: ubuntu:18.04
 
 
 %startscript
-  exec /opt/openrefine-3.1/refine
+  exec /bin/bash /startopenrefine.sh
 
 %runscript
-  $*
+  exec /bin/bash /startopenrefine.sh
 
 %environment
   OPENREFINE_PATH=/opt/openrefine-3.1
   export PATH=$OPENREFINE_PATH:$PATH
 
+%files
+    startopenrefine.sh
+
 %post
   apt update -y
-  apt-get install -y software-properties-common wget locales default-jre
-  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic main restricted'
-  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates main restricted'
-  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic universe'
-  # apt-add-repository -y 'deb http://us.archive.ubuntu.com/ubuntu/ bionic-updates universe'
-
+  apt-get install -y software-properties-common wget locales default-jre firefox
   locale-gen en_AU.UTF-8
 
   cd /opt
   wget -O openrefine-linux-3.1.tar.gz https://github.com/OpenRefine/OpenRefine/releases/download/3.1/openrefine-linux-3.1.tar.gz
   tar -zxvf openrefine-linux-3.1.tar.gz
+  ln -s openrefine-3.1 openrefine
+  
