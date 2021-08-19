@@ -1,17 +1,19 @@
-FROM ubuntu:18.04
+FROM openjdk:8-jre-alpine
 
-ENV OPENREFINE_PATH=/opt/openrefine-3.1
-RUN export PATH=$OPENREFINE_PATH:$PATH
+# Instance url of the latest version of openrefine
+ENV OR_URL https://github.com/OpenRefine/OpenRefine/releases/download/3.4.1/openrefine-linux-3.4.1.tar.gz
 
-COPY startopenrefine.sh .
+WORKDIR /app
 
-RUN apt update -y && \
-  apt-get install -y software-properties-common wget locales default-jre firefox && \
-  locale-gen en_AU.UTF-8
+# Download Openrefine
+RUN set -xe \
+    && apk add --no-cache bash curl grep tar \
+    && curl -sSL ${OR_URL} | tar xz --strip 1 \
 
-RUN cd /opt && \
-  wget -O openrefine-linux-3.1.tar.gz https://github.com/OpenRefine/OpenRefine/releases/download/3.1/openrefine-linux-3.1.tar.gz && \
-  tar -zxvf openrefine-linux-3.1.tar.gz && \
-  ln -s openrefine-3.1 openrefine
-  
-ENTRYPOINT exec /bin/bash /startopenrefine.sh
+VOLUME /data
+WORKDIR /data
+
+EXPOSE 3333
+
+ENTRYPOINT ["/app/refine"]
+CMD ["-i", "0.0.0.0", "-d", "/data"]
