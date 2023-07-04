@@ -8,7 +8,7 @@ WORKDIR /app
 # Download Openrefine
 RUN set -xe \
     && apk add --no-cache bash curl grep tar \
-    && curl -sSL ${OR_URL} | tar xz --strip 1 \
+    && curl -sSL ${OR_URL} | tar xz --strip 1
 
 VOLUME /data
 WORKDIR /data
